@@ -89,20 +89,62 @@
 				},
 				{
 					"name": "Search_By_Category_Marble",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "76435830-07ce-479b-9837-ad55ebae9bb8",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData)",
+									"   ",
+									"   tests[\"Page  should be 1\"]= jsonData.page   === 1;",
+									"   tests[\"First page should display 32 products\"]= jsonData.limit   === 32;",
+									"   tests[\"Every Product should have brand\"]= pm.expect(jsonData.items[0]).to.have.property('brand');",
+									"   tests[\"Every Product should have price\"]= pm.expect(jsonData.items[0]).to.have.property('price');",
+									"   tests[\"Every Product should have rating\"]= pm.expect(jsonData.items[0]).to.have.property('rating');",
+									"   tests[\"Every Product should have skuName\"]= pm.expect(jsonData.items[0]).to.have.property('skuName');",
+									"   tests[\"Every Product should have skuNumber\"]= pm.expect(jsonData.items[0]).to.have.property('skuNumber');",
+									"   tests[\"Every Product should have supplierId\"]= pm.expect(jsonData.items[0]).to.have.property('supplierId');",
+									"   tests[\"Category Should be marble for all searched product\"]= jsonData.items[0].categoryId=129;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"f\":[{\"field\":\"primaryCategory.o_id\",\"type\":\"category\",\"codes\":[\"129\"]}],\"limit\":32,\"page\":1,\"transformData\":true}"
 						},
 						"url": {
-							"raw": "https://qa.nocnoc-internal.com/buyer-service/search",
-							"protocol": "https",
+							"raw": "{{environment}}/buyer-service/search",
 							"host": [
-								"qa",
-								"nocnoc-internal",
-								"com"
+								"{{environment}}"
 							],
 							"path": [
 								"buyer-service",
