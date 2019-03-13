@@ -137,7 +137,7 @@ let executeNewman = (collectionFile,environmentFile, iterationCount) => {
             collection: collectionFile,
             environment: environmentFile,
             iterationCount: iterationCount,
-            reporters: ['htmlextra-BuyerService'],
+            reporters: ['htmlextra'],
             reporter: {
                 htmlextra: {
                     export: './reports/htmlResults.html'
