@@ -152,7 +152,7 @@ let executeNewman = (collectionFile,environmentFile, iterationCount) => {
     })
 }
 
-function InvalidName(responseURL, message, res) {
+function InvalidName(responseURL, message, res,envorcol) {
     axios({
         method: 'post',
         url: `${responseURL}`,
@@ -162,7 +162,7 @@ function InvalidName(responseURL, message, res) {
             "attachments": [
                 {
                     "color": "danger",
-                    "title": "Invalid Environment",
+                    "title": "Invalid ${envorcol}",
                     "mrkdwn": true,
                     "fields": [
                         {
@@ -187,20 +187,20 @@ app.post("/newmanRun", (req, res) => {
     const iterationCount = parseInt((channelText).split(" ")[2])
     
     const filename = `./environments/${enteredEnv}.postman_environment.json`
-	const collectionname=`./collection/${enterdCollection}.postman_environment.json`
+	const collectionname=`./collection/${enterdCollection}.postman_collection.json`
 	const collectionnameCheck = fs.existsSync(collectionname)
 
     if (channelText.length === 0) {
         
         message = "Please enter an valid *Collection* name."
         
-        return InvalidName(responseURL, message, res)
+        return InvalidName(responseURL, message, res,'Collection')
 
     } else if (collectionnameCheck === false) {
         
         message = `Could not find the *${path.basename(collectionname)}* collection file. Please try again.` 
         
-        return InvalidName(responseURL, message, res)
+        return InvalidName(responseURL, message, res,'Collection')
 
     } else {
         collectionFile = collectionname
@@ -212,13 +212,13 @@ app.post("/newmanRun", (req, res) => {
         
         message = "Please enter an valid *Environment* name."
         
-        return InvalidName(responseURL, message, res)
+        return InvalidName(responseURL, message, res,'Environment')
 
     } else if (fileNameCheck === false) {
         
         message = `Could not find the *${path.basename(filename)}* environment file. Please try again.` 
         
-        return InvalidName(responseURL, message, res)
+        return InvalidName(responseURL, message, res,'Environment')
 
     } else {
         environmentFile = filename
