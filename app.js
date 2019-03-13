@@ -241,7 +241,7 @@ app.post("/newmanRun", (req, res) => {
             "attachments": [
                 {
                     "color": "good",
-                    "title": "*${enterdCollection}* API Automation Started",
+                    "title":  ` *${enterdCollection}* API Automation Started`,  
                     "mrkdwn": true,
                     "fields": [
                         {
