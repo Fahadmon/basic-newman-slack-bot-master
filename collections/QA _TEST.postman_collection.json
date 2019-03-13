@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "ad3c59b3-44d4-492a-933d-32346edbd75e",
+		"name": "QA _TEST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://qa.nocnoc-internal.com/config/appconfig.json",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "de1f2da7-c0e3-4f7b-9cd7-eb013cb06b60",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('Some test name', function () {",
+							"\tpm.response.to.have.status(200);",
+							"\tpm.expect(pm.response.responseTime).to.be.below(400);",
+							"})"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://qa.nocnoc-internal.com/config/appconfig.json",
+					"protocol": "https",
+					"host": [
+						"qa",
+						"nocnoc-internal",
+						"com"
+					],
+					"path": [
+						"config",
+						"appconfig.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://qa.nocnoc-internal.com/authentication-service/auth/guestlogin?lang=en&userType=buyer&orgIdfier=scg",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23983a21-77d7-44df-af8f-8d6551955c1a",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('Some test name', function () {",
+							"\tpm.response.to.have.status(200);",
+							"\tpm.expect(pm.response.responseTime).to.be.below(400);",
+							"})"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://qa.nocnoc-internal.com/authentication-service/auth/guestlogin?lang=en&userType=buyer&orgIdfier=scg",
+					"protocol": "https",
+					"host": [
+						"qa",
+						"nocnoc-internal",
+						"com"
+					],
+					"path": [
+						"authentication-service",
+						"auth",
+						"guestlogin"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "en"
+						},
+						{
+							"key": "userType",
+							"value": "buyer"
+						},
+						{
+							"key": "orgIdfier",
+							"value": "scg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://qa.nocnoc-internal.com/buyer-service/portal-settings?lang=en&userType=buyer&orgIdfier=scg&localeCode=en",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d82ad14-48a1-4eaf-9b1a-f87078b66468",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('Some test name', function () {",
+							"\tpm.response.to.have.status(200);",
+							"\tpm.expect(pm.response.responseTime).to.be.below(400);",
+							"})"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://qa.nocnoc-internal.com/buyer-service/portal-settings?lang=en&userType=buyer&orgIdfier=scg&localeCode=en",
+					"protocol": "https",
+					"host": [
+						"qa",
+						"nocnoc-internal",
+						"com"
+					],
+					"path": [
+						"buyer-service",
+						"portal-settings"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "en"
+						},
+						{
+							"key": "userType",
+							"value": "buyer"
+						},
+						{
+							"key": "orgIdfier",
+							"value": "scg"
+						},
+						{
+							"key": "localeCode",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://qa.nocnoc-internal.com/buyer-static/qa-nocnoc-dynamic-content/categories/all_en.json?lang=en&userType=buyer&orgIdfier=scg&uid=uid-1552280979914",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6529b46e-df40-4ffd-a77a-5f25c8ec83f0",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('Some test name', function () {",
+							"\tpm.response.to.have.status(200);",
+							"\tpm.expect(pm.response.responseTime).to.be.below(400);",
+							"})"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://qa.nocnoc-internal.com/buyer-static/qa-nocnoc-dynamic-content/categories/all_en.json?lang=en&userType=buyer&orgIdfier=scg&uid=uid-1552280979914",
+					"protocol": "https",
+					"host": [
+						"qa",
+						"nocnoc-internal",
+						"com"
+					],
+					"path": [
+						"buyer-static",
+						"qa-nocnoc-dynamic-content",
+						"categories",
+						"all_en.json"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "en"
+						},
+						{
+							"key": "userType",
+							"value": "buyer"
+						},
+						{
+							"key": "orgIdfier",
+							"value": "scg"
+						},
+						{
+							"key": "uid",
+							"value": "uid-1552280979914"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://qa.nocnoc-internal.com/buyer-service/search",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "08467cd2-f97a-4262-b2f2-267228b4b57d",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test('Some test name', function () {",
+							"\tpm.response.to.have.status(200);",
+							"\tpm.expect(pm.response.responseTime).to.be.below(400);",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://qa.nocnoc-internal.com/buyer-service/search",
+					"protocol": "https",
+					"host": [
+						"qa",
+						"nocnoc-internal",
+						"com"
+					],
+					"path": [
+						"buyer-service",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://reqres.in/api/users?page=2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b0429e06-ca73-4b80-af15-b86a978c9702",
+						"exec": [
+							"postman.setGlobalVariable(\"Token\", \"MyDemoToken\");\r",
+							"postman.setEnvironmentVariable(\"MyKey\", \"MyDemoKey\");\r",
+							"postman.getGlobalVariable(\"MyDemoKey\");\r",
+							"console.log(\"Global Variable = \"+postman.getGlobalVariable(\"Token\"));\r",
+							"console.log(\"Environment Variable = \"+postman.getEnvironmentVariable(\"MyKey\"));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ff30f0d0-9dc2-4df6-af81-d52b5b1fb129",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code = 200;",
+							"tests['Body matches string'] = responseBody.has(\"Eve\");",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests['Response should have id of Eve as 4: ' ] = jsonData.data[0].id=4;",
+							"tests['Response should have last name of Eve as bluth'] = jsonData.data[0].last_name = \"Holt\";",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				},
+				"description": "RRR"
+			},
+			"response": []
+		},
+		{
+			"name": "SlackIntegration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"QA Execution Results.\"\r\n}"
+				},
+				"url": {
+					"raw": "https://hooks.slack.com/services/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",
+					"protocol": "https",
+					"host": [
+						"hooks",
+						"slack",
+						"com"
+					],
+					"path": [
+						"services",
+						"TGTUNMEE5",
+						"BGW0CECVC",
+						"d9gS5mmcdOK14KjkaxJgekFQ"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

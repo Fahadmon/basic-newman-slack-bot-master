@@ -131,10 +131,10 @@ class TestRunContext {
     }
 }
 
-let executeNewman = (environmentFile, iterationCount) => {
+let executeNewman = (collectionFile,environmentFile, iterationCount) => {
     return new Promise((resolve, reject) => {
         newman.run({
-            collection: './collections/Restful_Booker_Collection.json',
+            collection: collectionFile,
             environment: environmentFile,
             iterationCount: iterationCount,
             reporters: ['htmlextra'],
@@ -181,11 +181,30 @@ app.post("/newmanRun", (req, res) => {
     
     const responseURL = req.body.response_url
     const channelText = req.body.text
-
-    const enteredEnv     = (channelText).split(" ")[0]
-    const iterationCount = parseInt((channelText).split(" ")[1])
+	
+    const enterdCollection=(channelText).split(" ")[0]
+    const enteredEnv     = (channelText).split(" ")[1]
+    const iterationCount = parseInt((channelText).split(" ")[2])
     
-    const filename = `./environments/${enteredEnv}_Restful_Booker_Environment.json`
+    const filename = `./environments/${enteredEnv}.postman_environment.json`
+	const collectionname=`./collection/${enterdCollection}.postman_environment.json`
+	const collectionnameCheck = fs.existsSync(collectionname)
+
+    if (channelText.length === 0) {
+        
+        message = "Please enter an valid *Collection* name."
+        
+        return InvalidName(responseURL, message, res)
+
+    } else if (collectionnameCheck === false) {
+        
+        message = `Could not find the *${path.basename(collectionname)}* collection file. Please try again.` 
+        
+        return InvalidName(responseURL, message, res)
+
+    } else {
+        collectionFile = collectionname
+    }
     
     const fileNameCheck = fs.existsSync(filename)
 
@@ -214,11 +233,11 @@ app.post("/newmanRun", (req, res) => {
             "attachments": [
                 {
                     "color": "good",
-                    "title": "Newman Test Run Started",
+                    "title": "*{enterdCollection}* API Automation Started",
                     "mrkdwn": true,
                     "fields": [
                         {
-                            "value": `Your Summary Report for the *${enteredEnv}* environment will be with you _very_ soon`
+                            "value": `Your Summary Report for the *{enterdCollection}* on *${enteredEnv}* environment will be with you _very_ soon`
                         }
                     ]
                 }
@@ -226,7 +245,7 @@ app.post("/newmanRun", (req, res) => {
         }
     })
     .then(res.status(202).end())
-    .then(() => executeNewman(environmentFile, iterationCount))
+    .then(() => executeNewman(collectionFile,environmentFile, iterationCount))
     .then(newmanResult => { return new TestRunContext(newmanResult) })
     .then(context => {
         return axios({
