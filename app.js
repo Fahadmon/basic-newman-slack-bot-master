@@ -162,7 +162,7 @@ function InvalidName(responseURL, message, res,envorcol) {
             "attachments": [
                 {
                     "color": "danger",
-                    "title": "Invalid *${envorcol}*",
+                    "title": "invalid '+ envorcol +'",
                     "mrkdwn": true,
                     "fields": [
                         {
@@ -241,7 +241,7 @@ app.post("/newmanRun", (req, res) => {
             "attachments": [
                 {
                     "color": "good",
-                    "title":  ` *${enterdCollection}* API Automation Started`,  
+                    "title":  " ' + enterdCollection + ' API Automation Started ",  
                     "mrkdwn": true,
                     "fields": [
                         {
