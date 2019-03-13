@@ -162,7 +162,7 @@ function InvalidName(responseURL, message, res,envorcol) {
             "attachments": [
                 {
                     "color": "danger",
-                    "title": "Invalid ${envorcol}",
+                    "title": "Invalid *{envorcol}*",
                     "mrkdwn": true,
                     "fields": [
                         {
@@ -187,20 +187,24 @@ app.post("/newmanRun", (req, res) => {
     const iterationCount = parseInt((channelText).split(" ")[2])
     
     const filename = `./environments/${enteredEnv}.postman_environment.json`
-	const collectionname=`./collection/${enterdCollection}.postman_collection.json`
+	const collectionname=`./collections/${enterdCollection}.postman_collection.json`
 	const collectionnameCheck = fs.existsSync(collectionname)
 
     if (channelText.length === 0) {
         
         message = "Please enter an valid *Collection* name."
+		
+		envorcol="Collection"
         
-        return InvalidName(responseURL, message, res,'Collection')
+        return InvalidName(responseURL, message, res,envorcol)
 
     } else if (collectionnameCheck === false) {
         
         message = `Could not find the *${path.basename(collectionname)}* collection file. Please try again.` 
+		
+		envorcol="Collection"
         
-        return InvalidName(responseURL, message, res,'Collection')
+        return InvalidName(responseURL, message, res,envorcol)
 
     } else {
         collectionFile = collectionname
@@ -211,14 +215,18 @@ app.post("/newmanRun", (req, res) => {
     if (channelText.length === 0) {
         
         message = "Please enter an valid *Environment* name."
+		
+		envorcol="Environment"
         
-        return InvalidName(responseURL, message, res,'Environment')
+        return InvalidName(responseURL, message, res,envorcol)
 
     } else if (fileNameCheck === false) {
         
         message = `Could not find the *${path.basename(filename)}* environment file. Please try again.` 
         
-        return InvalidName(responseURL, message, res,'Environment')
+		envorcol="Environment"
+		
+        return InvalidName(responseURL, message, res,envorcol)
 
     } else {
         environmentFile = filename
