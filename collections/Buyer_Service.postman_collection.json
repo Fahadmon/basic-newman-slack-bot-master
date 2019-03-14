@@ -426,15 +426,81 @@
 				},
 				{
 					"name": "Compare_Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0a4e5cc0-6ff0-44e8-8f22-5ef03f3c922c",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"var jsonData = JSON.parse(responseBody); ",
+									"  console.log(jsonData)",
+									"    var skuNumber1=postman.getEnvironmentVariable(\"skuNumber1\")",
+									"  var skuNumber2=postman.getEnvironmentVariable(\"skuNumber2\")",
+									"  tests[\"Added Product for comparison contains skuNumber\"+skuNumber1]= jsonData[skuNumber1].skuNumber==skuNumber1",
+									"  tests[\"Added Product for comparison contains skuNumber\"+skuNumber2]= jsonData[skuNumber2].skuNumber==skuNumber2",
+									"  tests[\"Compared Attribute Length is equla to 36 \"]=jsonData.comparableAttributes.length==36"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{environment}}/buyer-service/product-comparison-details?lang=en&userType=buyer&orgIdfier=scg&category=Marble-Tile&skuNumbers={{skuNumber1}},{{skuNumber2}}&skuNumber={{skuNumber1}},{{skuNumber2}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"product-comparison-details"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "category",
+									"value": "Marble-Tile"
+								},
+								{
+									"key": "skuNumbers",
+									"value": "{{skuNumber1}},{{skuNumber2}}"
+								},
+								{
+									"key": "skuNumber",
+									"value": "{{skuNumber1}},{{skuNumber2}}"
+								}
+							]
 						}
 					},
 					"response": []
