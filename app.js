@@ -140,13 +140,15 @@ let executeNewman = (collectionFile,environmentFile, iterationCount) => {
             reporters: ['htmlextra'],
             reporter: {
                 htmlextra: {
-                    export: './reports/htmlResults.html'
+                    export: './reports/htmlResults.html',environment
+					
                 }
             }
         }, (err, summary) => {
             if (err) {
                 return reject(err)
             }
+		
             resolve(summary)
         })
     })
