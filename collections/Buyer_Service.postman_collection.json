@@ -153,6 +153,179 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search_By_Price-Low To High",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a2b8f16d-3f9b-4b45-9462-775130744f88",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b9109c73-9eed-49d1-8cdd-331bd0ca8208",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   var price1= jsonData.items[0].price.originalPrice;",
+									"   var price2= jsonData.items[10].price.originalPrice;",
+									"   var price3= jsonData.items[20].price.originalPrice;",
+									"   console.log(price1);",
+									"   console.log(price2);",
+									"   console.log(price3);",
+									"   pm.test(\"price shorted\", function () { ",
+									"       if(price1>price2 && price2>price3)",
+									"        {",
+									"            ",
+									"            pm.response.to.be.success;",
+									"        }",
+									"        else",
+									"        {",
+									"            pm.response.to.not.be.success;",
+									"        }",
+									"    ",
+									"})",
+									"   "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"f\":[{\"field\":\"primaryCategory.o_id\",\"type\":\"category\",\"codes\":[\"129\"]},{\"field\":\"stockStatus\",\"operator\":\"eq\",\"codes\":[\"IN_STOCK\",\"COMING_SOON\",\"isMadeToOrder.code\"]}],\"sort\":\"plh\",\"limit\":32,\"page\":1,\"transformData\":true}"
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/search",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search_By_Price-High To Low",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/search",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Compare Product",
+			"item": [
+				{
+					"name": "Add_1_Products_To_Compare",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add_2_Products_To_Comapre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Compare_Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove_1_Item_From_Compare",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			]
 		}
