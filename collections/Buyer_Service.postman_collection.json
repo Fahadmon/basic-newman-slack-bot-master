@@ -95,6 +95,7 @@
 							"script": {
 								"id": "76435830-07ce-479b-9837-ad55ebae9bb8",
 								"exec": [
+									"",
 									"pm.test(\"Response status is ok\",function(){",
 									"    pm.response.to.have.status(200);",
 									"})",
@@ -116,7 +117,24 @@
 									"   tests[\"Every Product should have skuName\"]= pm.expect(jsonData.items[0]).to.have.property('skuName');",
 									"   tests[\"Every Product should have skuNumber\"]= pm.expect(jsonData.items[0]).to.have.property('skuNumber');",
 									"   tests[\"Every Product should have supplierId\"]= pm.expect(jsonData.items[0]).to.have.property('supplierId');",
-									"   tests[\"Category Should be marble for all searched product\"]= jsonData.items[0].categoryId=129;"
+									"   tests[\"Category Should be marble for all searched product\"]= jsonData.items[0].categoryId=129;",
+									"  var random1= Math.floor(Math.random() * 32);",
+									"  var random2= Math.floor(Math.random() * 32);",
+									"  var skuNumber1=jsonData.items[random1].skuNumber;",
+									"  var skuNumber2=jsonData.items[random2].skuNumber;",
+									"  //postman.setEnvironmentVariable('skuNumber1', skuNumber1);",
+									"   // postman.setEnvironmentVariable('skuNumber2',skuNumber2);",
+									"   ",
+									"const fs       = require('fs');",
+									"const fileName = `./environments/Buyer_QA.postman_environment.json`;",
+									"const file     = require(fileName);",
+									"file.values[2].value = skuNumber1;",
+									"file.values[3].value = skuNumber2;",
+									"",
+									"",
+									"",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
