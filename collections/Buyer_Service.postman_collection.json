@@ -121,8 +121,10 @@
 									"  var random1= Math.floor(Math.random() * 32);",
 									"  var random2= Math.floor(Math.random() * 32);",
 									"  var skuNumber1=jsonData.items[random1].skuNumber;",
+									"  var skuName1=jsonData.items[random1].skuName;",
 									"  var skuNumber2=jsonData.items[random2].skuNumber;",
-									"  postman.setEnvironmentVariable('skuNumber1', skuNumber1);",
+									"   postman.setEnvironmentVariable('skuNumber1', skuNumber1);",
+									"    postman.setEnvironmentVariable('skuName1', skuName1);",
 									"   postman.setEnvironmentVariable('skuNumber2',skuNumber2);",
 									"   ",
 									"",
@@ -596,6 +598,111 @@
 								{
 									"key": "skuNumbers",
 									"value": "{{skuNumber1}},{{skuNumber2}}"
+								},
+								{
+									"key": "skuNumber",
+									"value": "{{skuNumber1}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PDP ",
+			"item": [
+				{
+					"name": "Product_Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d549875d-dcf5-48e6-b90b-4b64908da5a3",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   var skuNumber1=pm.environment.get('skuNumber1');",
+									"   var skuName1=pm.environment.get('skuName1');",
+									"   pm.test(\"skuNumber \\t\"+skuNumber1 + \"\\tand skuName\\t \"+skuName1+\"\\t are contains in response \",function(){",
+									"     // console.log(jsonData.brand);",
+									"      pm.expect(skuNumber1).to.equal(jsonData.skuNumber);",
+									"      pm.expect(skuName1).to.equal(jsonData.skuName);",
+									"     ",
+									"   })",
+									"   tests[\"PDP page have Property  brand\"]= pm.expect(jsonData).to.have.property('brand');",
+									"   tests[\"PDP page have Property  imgGallery\"]= pm.expect(jsonData).to.have.property('imgGallery');",
+									"   tests[\"PDP page have Property  otherDetails\"]= pm.expect(jsonData).to.have.property('otherDetails');",
+									"   tests[\"PDP page have Property  price\"]= pm.expect(jsonData).to.have.property('price');",
+									"   tests[\"PDP page have Property  productDimensions\"]= pm.expect(jsonData).to.have.property('productDimensions');",
+									"   tests[\"PDP page have Property  tabs\"]= pm.expect(jsonData).to.have.property('tabs');",
+									"   tests[\"PDP page have Property  variants\"]= pm.expect(jsonData).to.have.property('variants');",
+									"   tests[\"PDP page have Property  supplierId\"]= pm.expect(jsonData).to.have.property('supplierId');",
+									"   tests[\"PDP page have Property  sellerName\"]= pm.expect(jsonData).to.have.property('sellerName');",
+									"   tests[\"PDP page have Property  taxInvoiceAvailable\"]= pm.expect(jsonData).to.have.property('taxInvoiceAvailable');",
+									"   tests[\"PDP page have Property  inStock\"]= pm.expect(jsonData).to.have.property('inStock');",
+									"   tests[\"PDP page have Property  freeSampleEnabled\"]= pm.expect(jsonData).to.have.property('freeSampleEnabled');",
+									"   tests[\"PDP page have Property  customMade\"]= pm.expect(jsonData).to.have.property('customMade');",
+									"   tests[\"PDP page have Property  comingSoon\"]= pm.expect(jsonData).to.have.property('comingSoon');",
+									"   tests[\"PDP page have Property  categoryId\"]= pm.expect(jsonData).to.have.property('categoryId');",
+									"   tests[\"PDP page have Property  installationSupport\"]= pm.expect(jsonData).to.have.property('installationSupport');",
+									"   tests[\"PDP page have Property  desc\"]= pm.expect(jsonData).to.have.property('desc');",
+									"   tests[\"PDP page have Property  image\"]= pm.expect(jsonData).to.have.property('image');",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/product-details?lang=en&userType=buyer&orgIdfier=scg&nameIdfier={{skuName1}}&skuNumber={{skuNumber1}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"product-details"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "nameIdfier",
+									"value": "{{skuName1}}"
 								},
 								{
 									"key": "skuNumber",
