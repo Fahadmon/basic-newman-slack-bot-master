@@ -1062,15 +1062,80 @@
 				},
 				{
 					"name": "Share_Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fc839b5f-1972-4485-9800-82ea58e3d611",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   var url=jsonData.url",
+									"   console.log(url);",
+									"   tests[\"Shared Url is valid\"]=pm.expect(url).to.equal(pm.environment.get('environment') + \"/en/p/\" +pm.environment.get('skuName1') + \"/\"+pm.environment.get('skuNumber1')+\"?su=-1\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{environment}}/buyer-service/share-product?lang=en&userType=buyer&orgIdfier=scg&nameIdfier={{skuName1}}&skuNumber={{skuNumber1}}&url={{environment}}/en/p/{{skuName1}}/{{skuNumber1}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"share-product"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "nameIdfier",
+									"value": "{{skuName1}}"
+								},
+								{
+									"key": "skuNumber",
+									"value": "{{skuNumber1}}"
+								},
+								{
+									"key": "url",
+									"value": "{{environment}}/en/p/{{skuName1}}/{{skuNumber1}}"
+								}
+							]
 						}
 					},
 					"response": []
