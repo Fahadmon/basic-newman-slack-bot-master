@@ -123,8 +123,10 @@
 									"  var skuNumber1=jsonData.items[random1].skuNumber;",
 									"  var skuName1=jsonData.items[random1].skuName;",
 									"  var skuNumber2=jsonData.items[random2].skuNumber;",
+									"  var skuName2=jsonData.items[random2].skuName;",
 									"   postman.setEnvironmentVariable('skuNumber1', skuNumber1);",
 									"    postman.setEnvironmentVariable('skuName1', skuName1);",
+									"     postman.setEnvironmentVariable('skuName2', skuName2);",
 									"   postman.setEnvironmentVariable('skuNumber2',skuNumber2);",
 									"   ",
 									"",
@@ -266,12 +268,67 @@
 				},
 				{
 					"name": "Search_By_Price-High To Low",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "28f3227b-6abe-44a6-8f88-833afc98e2f2",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   var price1= jsonData.items[0].price.originalPrice;",
+									"   var price2= jsonData.items[10].price.originalPrice;",
+									"   var price3= jsonData.items[20].price.originalPrice;",
+									"   console.log(price1);",
+									"   console.log(price2);",
+									"   console.log(price3);",
+									"   pm.test(\"price shorted High To Low\", function () { ",
+									"       if(price1>=price2 && price2>=price3)",
+									"        {",
+									"            ",
+									"            pm.response.to.be.success;",
+									"        }",
+									"        else",
+									"        {",
+									"            pm.response.to.not.be.success;",
+									"        }",
+									"    ",
+									"})",
+									"   ",
+									"   "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"f\":[{\"field\":\"primaryCategory.o_id\",\"type\":\"category\",\"codes\":[\"129\"]},{\"field\":\"stockStatus\",\"operator\":\"eq\",\"codes\":[\"IN_STOCK\",\"COMING_SOON\",\"isMadeToOrder.code\"]}],\"sort\":\"phl\",\"limit\":32,\"page\":1,\"transformData\":true}"
 						},
 						"url": {
 							"raw": "{{environment}}/buyer-service/search",
@@ -611,6 +668,113 @@
 			]
 		},
 		{
+			"name": "Quick View",
+			"item": [
+				{
+					"name": "product_overview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "77d977d6-869e-4b8b-b1e5-fb1738d05a50",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   var skuNumber2=pm.environment.get('skuNumber2');",
+									"   var skuName2=pm.environment.get('skuName2');",
+									"   pm.test(\"skuNumber \\t\"+skuNumber2 + \"\\tand skuName\\t \"+skuName2+\"\\t are contains in overview \",function(){",
+									"     // console.log(jsonData.brand);",
+									"      pm.expect(skuNumber2).to.equal(jsonData.skuNumber);",
+									"      pm.expect(skuName2).to.equal(jsonData.skuName);",
+									"     ",
+									"   })",
+									"   ",
+									"   tests[\"Product Overview have Property  brand\"]= pm.expect(jsonData).to.have.property('brand');",
+									"   tests[\"Product Overview have Property  imgGallery\"]= pm.expect(jsonData).to.have.property('imgGallery');",
+									"   tests[\"Product Overview have Property  otherDetails\"]= pm.expect(jsonData).to.have.property('otherDetails');",
+									"   tests[\"Product Overview have Property  price\"]= pm.expect(jsonData).to.have.property('price');",
+									"   tests[\"Product Overview have Property  rating\"]= pm.expect(jsonData).to.have.property('rating');",
+									"   tests[\"Product Overview have Property  tabs\"]= pm.expect(jsonData).to.have.property('tabs');",
+									"   tests[\"Product Overview have Property  variantYN\"]= pm.expect(jsonData).to.have.property('variantYN');",
+									"   tests[\"Product Overview have Property  supplierId\"]= pm.expect(jsonData).to.have.property('supplierId');",
+									"   tests[\"Product Overview have Property  sellerName\"]= pm.expect(jsonData).to.have.property('sellerName');",
+									"   tests[\"Product Overview have Property  taxInvoiceAvailable\"]= pm.expect(jsonData).to.have.property('taxInvoiceAvailable');",
+									"   tests[\"Product Overview have Property  inStock\"]= pm.expect(jsonData).to.have.property('inStock');",
+									"   tests[\"Product Overview have Property  freeSampleEnabled\"]= pm.expect(jsonData).to.have.property('freeSampleEnabled');",
+									"   tests[\"Product Overview have Property  customMade\"]= pm.expect(jsonData).to.have.property('customMade');",
+									"   tests[\"Product Overview have Property  comingSoon\"]= pm.expect(jsonData).to.have.property('comingSoon');",
+									"   tests[\"Product Overview have Property  categoryId\"]= pm.expect(jsonData).to.have.property('categoryId');",
+									"   tests[\"Product Overview have Property  installationSupport\"]= pm.expect(jsonData).to.have.property('installationSupport');",
+									"   tests[\"Product Overview have Property  desc\"]= pm.expect(jsonData).to.have.property('desc');",
+									"   tests[\"Product Overview have Property  image\"]= pm.expect(jsonData).to.have.property('image');",
+									"   tests[\"Product Overview have Property  name\"]= pm.expect(jsonData).to.have.property('name');",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/product-overview?lang=en&userType=buyer&orgIdfier=scg&category=Marble-Tile&skuNumber={{skuNumber2}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"product-overview"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "category",
+									"value": "Marble-Tile"
+								},
+								{
+									"key": "skuNumber",
+									"value": "{{skuNumber2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "PDP ",
 			"item": [
 				{
@@ -659,6 +823,7 @@
 									"   tests[\"PDP page have Property  installationSupport\"]= pm.expect(jsonData).to.have.property('installationSupport');",
 									"   tests[\"PDP page have Property  desc\"]= pm.expect(jsonData).to.have.property('desc');",
 									"   tests[\"PDP page have Property  image\"]= pm.expect(jsonData).to.have.property('image');",
+									"   tests[\"Product Overview have Property  name\"]= pm.expect(jsonData).to.have.property('name');",
 									" "
 								],
 								"type": "text/javascript"
@@ -709,6 +874,203 @@
 									"value": "{{skuNumber1}}"
 								}
 							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Required_Accessories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6a30510f-1cca-48c3-8f24-871bb254f482",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"",
+									"   pm.test(\"limit count,pages and totalItems are expected \",function(){",
+									"     // console.log(jsonData.brand);",
+									"      pm.expect(jsonData.limit).to.equal(50);",
+									"      pm.expect(jsonData.page).to.equal(1);",
+									"      pm.expect(jsonData.totalItems).to.equal(4);",
+									"     ",
+									"   })",
+									"   ",
+									"   tests[\"Required Accessories have Property  brand\"]= pm.expect(jsonData.items[0]).to.have.property('brand');",
+									"   tests[\"Required Accessories have Property  price\"]= pm.expect(jsonData.items[0]).to.have.property('price');",
+									"   tests[\"Required Accessories have Property  rating\"]= pm.expect(jsonData.items[0]).to.have.property('rating');",
+									"   tests[\"Required Accessories have Property  supplierId\"]= pm.expect(jsonData.items[0]).to.have.property('supplierId');",
+									"   tests[\"Required Accessories have Property  sellerName\"]= pm.expect(jsonData.items[0]).to.have.property('sellerName');",
+									"   tests[\"Required Accessories have Property  taxInvoiceAvailable\"]= pm.expect(jsonData.items[0]).to.have.property('taxInvoiceAvailable');",
+									"   tests[\"Required Accessories have Property  inStock\"]= pm.expect(jsonData.items[0]).to.have.property('inStock');",
+									"   tests[\"Required Accessories have Property  freeSampleEnabled\"]= pm.expect(jsonData.items[0]).to.have.property('freeSampleEnabled');",
+									"   tests[\"Required Accessories have Property  customMade\"]= pm.expect(jsonData.items[0]).to.have.property('customMade');",
+									"   tests[\"Required Accessories have Property  comingSoon\"]= pm.expect(jsonData.items[0]).to.have.property('comingSoon');",
+									"   tests[\"Required Accessories have Property  categoryId\"]= pm.expect(jsonData.items[0]).to.have.property('categoryId');",
+									"   tests[\"Required Accessories have Property  installationSupport\"]= pm.expect(jsonData.items[0]).to.have.property('installationSupport');",
+									"   tests[\"Required Accessories have Property  desc\"]= pm.expect(jsonData.items[0]).to.have.property('desc');",
+									"   tests[\"Required Accessories have Property  image\"]= pm.expect(jsonData.items[0]).to.have.property('image');",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/required-accessories?lang=en&userType=buyer&orgIdfier=scg&nameIdfier={{skuName1}}&skuNumber={{skuNumber1}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"required-accessories"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "nameIdfier",
+									"value": "{{skuName1}}"
+								},
+								{
+									"key": "skuNumber",
+									"value": "{{skuNumber1}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CoverageArea_Calculator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "53f127ec-cc53-4033-8b63-b5d5a8e31b71",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   tests[\"Coverage area have property units \"]=pm.expect(jsonData).to.have.property('units');",
+									"   tests[\"Coverage area have property unitsType\"]=pm.expect(jsonData).to.have.property('unitsType');",
+									"   tests[\"Coverage area have property originalUnits\"]=pm.expect(jsonData).to.have.property('originalUnits');",
+									"   "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/qty-coveragearea?lang=en&userType=buyer&orgIdfier=scg&nameIdfier={{skuName1}}&skuNumber={{skuNumber1}}&area=1000&percWastage=10",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"qty-coveragearea"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "nameIdfier",
+									"value": "{{skuName1}}"
+								},
+								{
+									"key": "skuNumber",
+									"value": "{{skuNumber1}}"
+								},
+								{
+									"key": "area",
+									"value": "1000"
+								},
+								{
+									"key": "percWastage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Share_Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
 						}
 					},
 					"response": []
