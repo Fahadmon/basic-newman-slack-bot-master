@@ -93,7 +93,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "76435830-07ce-479b-9837-ad55ebae9bb8",
+								"id": "60faeee4-d04b-4862-8dda-e8441907d227",
 								"exec": [
 									"",
 									"pm.test(\"Response status is ok\",function(){",
@@ -123,11 +123,19 @@
 									"  var skuNumber1=jsonData.items[random1].skuNumber;",
 									"  var skuName1=jsonData.items[random1].skuName;",
 									"  var skuNumber2=jsonData.items[random2].skuNumber;",
+									"  var sellerId1=jsonData.items[random1].sellerId;",
+									"  var price1=jsonData.items[random1].price.price;",
+									"    var sellerId2=jsonData.items[random2].sellerId;",
+									"  var price2=jsonData.items[random2].price.price;",
 									"  var skuName2=jsonData.items[random2].skuName;",
 									"   postman.setEnvironmentVariable('skuNumber1', skuNumber1);",
 									"    postman.setEnvironmentVariable('skuName1', skuName1);",
 									"     postman.setEnvironmentVariable('skuName2', skuName2);",
 									"   postman.setEnvironmentVariable('skuNumber2',skuNumber2);",
+									"    postman.setEnvironmentVariable('sellerId1',sellerId1);",
+									"     postman.setEnvironmentVariable('price1',price1);",
+									"      postman.setEnvironmentVariable('sellerId2',sellerId2);",
+									"     postman.setEnvironmentVariable('price2',price2);",
 									"   ",
 									"",
 									"",
@@ -140,7 +148,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "474917f6-072d-45f4-b42d-1a6bd41be5fb",
+								"id": "1ba02bc1-4063-4de5-ba8c-dce819f50735",
 								"exec": [
 									""
 								],
@@ -1207,7 +1215,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552900906689},]}"
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552900906689}]}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/cart-products",
@@ -1344,7 +1352,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "ebb7d8d7-6434-421c-b61e-1e92567b617d",
+								"id": "e0779686-2195-4098-8994-e4267119e3bc",
 								"exec": [
 									"pm.test(\"Response status is ok\",function(){",
 									"    pm.response.to.have.status(200);",
@@ -1357,6 +1365,10 @@
 									"})",
 									"",
 									"   var jsonData = JSON.parse(responseBody); ",
+									"   postman.setEnvironmentVariable('jsonData',JSON.stringify(jsonData))",
+									"    var jsonArray = pm.response.json();",
+									"    console.log(jsonArray);",
+									"      postman.setEnvironmentVariable('jsonArray',jsonArray)",
 									"   console.log(jsonData);",
 									"  var sellerid=jsonData[0].sellerId",
 									"  console.log(sellerid)",
@@ -1372,6 +1384,8 @@
 									"   tests[\"cart product have Property  itemTotalPrice\"]= pm.expect(jsonData[0]).to.have.property('itemTotalPrice');",
 									"   tests[\"cart product have Property  name\"]= pm.expect(jsonData[0]).to.have.property('name')",
 									"     tests[\"cart product have Property  skuNumber=\"]= pm.expect(jsonData[0].skuNumber).to.equal(pm.environment.get('skuNumber2'));",
+									"     tests[\"cart product have Property  Price=\"]= pm.expect(pm.environment.get('price2')).to.equal('' + jsonData[0].price +'');",
+									"      tests[\"cart product have Property  sellerId=\"]= pm.expect(pm.environment.get('sellerId2')).to.equal('' + jsonData[0].sellerId +'');",
 									"  tests[\"cart product have Property  quantity=\"]= pm.expect(jsonData[0].quantity).to.equal(1);",
 									"  tests[\"cart product have Property  installationRequired=\"]= pm.expect(jsonData[0].installationRequired).to.equal(false);",
 									"  tests[\"cart product have Property  sampleItem=\"]= pm.expect(jsonData[0].sampleItem).to.equal(false);",
@@ -1419,7 +1433,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "7cae4903-2844-400d-823e-3a228a150b51",
+								"id": "df70b988-358d-4b15-8b8a-60508d1b83f9",
 								"exec": [
 									"pm.test(\"Response status is ok\",function(){",
 									"    pm.response.to.have.status(200);",
@@ -1432,7 +1446,8 @@
 									"})",
 									"",
 									"   var jsonData = JSON.parse(responseBody); ",
-									"   console.log(jsonData);"
+									"   console.log(jsonData);",
+									"    tests[\"Cart Price of added itesm is equal\"]=pm.expect(pm.environment.get('price2')).to.equal('' + jsonData.basePrice +'');"
 								],
 								"type": "text/javascript"
 							}
@@ -1444,18 +1459,18 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "text"
+								"type": "text",
+								"value": "{{token}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartId\":\"1552899049213-1696B193852\",\"requestId\":\"1698FFEFA72-1696B193852-1552908744230\",\"destinationZipCode\":\"\",\"couponCode\":\"\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552908737316,\"removed\":false}]}"
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartId\":\"1552899049213-1696B193852\",\"requestId\":\"1698FFEFA72-1696B193852-1552908744230\",\"destinationZipCode\":\"\",\"couponCode\":\"\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":1552908737316,\"removed\":false}]}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/cart-price",
@@ -1978,6 +1993,36 @@
 								"preorder",
 								"overview"
 							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save_Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SavedCards",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
 						}
 					},
 					"response": []
