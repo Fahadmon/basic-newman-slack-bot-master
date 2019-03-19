@@ -1143,7 +1143,7 @@
 			]
 		},
 		{
-			"name": "Cart_Operations",
+			"name": "Cart Operations",
 			"item": [
 				{
 					"name": "Add_To_Cart",
@@ -1179,6 +1179,8 @@
 									"   tests[\"cart product have Property  itemTotalPrice\"]= pm.expect(jsonData[0]).to.have.property('itemTotalPrice');",
 									"   tests[\"cart product have Property  name\"]= pm.expect(jsonData[0]).to.have.property('name')",
 									"     tests[\"cart product have Property  skuNumber=\"]= pm.expect(jsonData[0].skuNumber).to.equal(pm.environment.get('skuNumber1'));",
+									"     tests[\"cart product have Property  Price=\"]= pm.expect(pm.environment.get('price1')).to.equal('' + jsonData[0].price +'');",
+									"      tests[\"cart product have Property  sellerId=\"]= pm.expect(pm.environment.get('sellerId1')).to.equal('' + jsonData[0].sellerId +'');",
 									"  tests[\"cart product have Property  quantity=\"]= pm.expect(jsonData[0].quantity).to.equal(1);",
 									"  tests[\"cart product have Property  installationRequired=\"]= pm.expect(jsonData[0].installationRequired).to.equal(false);",
 									"  tests[\"cart product have Property  sampleItem=\"]= pm.expect(jsonData[0].sampleItem).to.equal(false);",
@@ -1205,7 +1207,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552900906689}]}"
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552900906689},]}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/cart-products",
@@ -1222,6 +1224,197 @@
 				},
 				{
 					"name": "Cart_Price",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7cae4903-2844-400d-823e-3a228a150b51",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   tests[\"Cart Price of added itesm is equal\"]=pm.expect(pm.environment.get('price1')).to.equal('' + jsonData.basePrice +'');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartId\":\"1552899049213-1696B193852\",\"requestId\":\"1698FFEFA72-1696B193852-1552908744230\",\"destinationZipCode\":\"\",\"couponCode\":\"\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552908737316,\"removed\":false}]}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/cart-price",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"cart-price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_Cart_Item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "49499b4c-82ce-4c9d-8885-2712dc77abef",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   tests[\"Cart Price is Zero\"]=pm.expect(jsonData.basePrice).to.equal(0);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartId\":\"1552899049213-1696B193852\",\"requestId\":\"1699459D984-1696B193852-1552973949428\",\"destinationZipCode\":\"\",\"couponCode\":\"\",\"cartItems\":[]}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/cart-price",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"cart-price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add_To_Cart2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ebb7d8d7-6434-421c-b61e-1e92567b617d",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"  var sellerid=jsonData[0].sellerId",
+									"  console.log(sellerid)",
+									"   ",
+									"   tests[\"cart product have Property  bulkPrice\"]= pm.expect(jsonData[0]).to.have.property('bulkPrice');",
+									"   tests[\"cart product have Property  bulkQuantity\"]= pm.expect(jsonData[0]).to.have.property('bulkQuantity');",
+									"   tests[\"cart product have Property  cartIdfier\"]= pm.expect(jsonData[0]).to.have.property('cartIdfier');",
+									"   tests[\"cart product have Property  categoryId\"]= pm.expect(jsonData[0]).to.have.property('categoryId');",
+									"   tests[\"cart product have Property  comingSoon\"]= pm.expect(jsonData[0]).to.have.property('comingSoon');",
+									"   tests[\"cart product have Property  dimensionUnit\"]= pm.expect(jsonData[0]).to.have.property('dimensionUnit');",
+									"   tests[\"cart product have Property  quantity\"]= pm.expect(jsonData[0]).to.have.property('quantity');",
+									"    tests[\"cart product have Property  inStock\"]= pm.expect(jsonData[0]).to.have.property('inStock');",
+									"   tests[\"cart product have Property  itemTotalPrice\"]= pm.expect(jsonData[0]).to.have.property('itemTotalPrice');",
+									"   tests[\"cart product have Property  name\"]= pm.expect(jsonData[0]).to.have.property('name')",
+									"     tests[\"cart product have Property  skuNumber=\"]= pm.expect(jsonData[0].skuNumber).to.equal(pm.environment.get('skuNumber2'));",
+									"  tests[\"cart product have Property  quantity=\"]= pm.expect(jsonData[0].quantity).to.equal(1);",
+									"  tests[\"cart product have Property  installationRequired=\"]= pm.expect(jsonData[0].installationRequired).to.equal(false);",
+									"  tests[\"cart product have Property  sampleItem=\"]= pm.expect(jsonData[0].sampleItem).to.equal(false);",
+									"  "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":1552900906689}]}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/cart-products",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"cart-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cart_Price2",
 					"event": [
 						{
 							"listen": "test",
@@ -1272,6 +1465,518 @@
 							"path": [
 								"order-service",
 								"cart-price"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "User_Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e38ecefc-e43b-44cf-a07f-d4b3c69983bc",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   tests[\"Authentication Service  have Property orgIdfier \"]= pm.expect(jsonData).to.have.property('orgIdfier');",
+									"   tests[\"Authentication Service  have Property userId\"]= pm.expect(jsonData).to.have.property('userId');",
+									"   tests[\"Authentication Service  have Property idpUserIdentifier\"]= pm.expect(jsonData).to.have.property('idpUserIdentifier');",
+									"   tests[\"Authentication Service  have Property phoneNo\"]= pm.expect(jsonData).to.have.property('phoneNo');",
+									"   tests[\"Authentication Service  have Property fullName\"]= pm.expect(jsonData).to.have.property('fullName');",
+									"   tests[\"Authentication Service  have Property resetToken\"]= pm.expect(jsonData).to.have.property('resetToken');",
+									"    tests[\"useremail in Authentication Service is =\"+pm.environment.get('email')]=pm.expect(pm.environment.get('email')).to.equal( jsonData.useremail);",
+									"    tests[\"userType in Authentication Service is = buyer\"]=pm.expect('buyer').to.equal( jsonData.userType);",
+									"    tests[\"idpProvider in Authentication Service is = auth0\"]=pm.expect('auth0').to.equal( jsonData.idpProvider);",
+									"   "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/authentication-service/user/email?lang=en&userType=buyer&orgIdfier=scg&email={{email}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"authentication-service",
+								"user",
+								"email"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "email",
+									"value": "{{email}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "96e8f329-ae80-4ce2-b4e8-c61fa76dae5d",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData)",
+									"   tests[\"Loged in  user  have Property accessToken\"]= pm.expect(jsonData).to.have.property('accessToken');",
+									"   var accessToken=jsonData.accessToken",
+									"   postman.setEnvironmentVariable('accessToken',accessToken);",
+									"   tests[\"Loged in  User have Property phoneNo \"]= pm.expect(jsonData).to.have.property('phoneNo');",
+									"   tests[\"Loged in User  have Property fullName\"]= pm.expect(jsonData).to.have.property('fullName');",
+									"     tests[\"Loged in User  have Property preferredLanguage \"]= pm.expect(jsonData).to.have.property('preferredLanguage');",
+									"   tests[\"Loged in  user  have Property userId\"]= pm.expect(jsonData).to.have.property('userId');",
+									"    var userId=jsonData.userId",
+									"   postman.setEnvironmentVariable('userId',userId);",
+									"   ",
+									"      ",
+									"      "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"fullName\":\"\",\"phoneNo\":\"\",\"useremail\":\"{{email}}\",\"password\":\"{{Password}}\",\"preferredLanguage\":\"en\"}"
+						},
+						"url": {
+							"raw": "{{environment}}/api/auth/login",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checkout",
+			"item": [
+				{
+					"name": "Merge_Carts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5aa9e02c-c865-4ab3-9c3b-87a6f059423e",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"  ",
+									"   ",
+									"    tests[\"Cart Data in Merged item  =1\"]=pm.expect(jsonData.cartData.length).to.equal( 1);",
+									"      tests[\"Cart Items in Merged item  =1\"]=pm.expect(jsonData.cartItems.length).to.equal(1);",
+									"      tests[\"Merged Cart having Sku with skuName=\"+pm.environment.get('skuName2')]=pm.expect(jsonData.cartData[0].skuName).to.equal(pm.environment.get('skuName2'));",
+									"       tests[\"Merged Cart having Sku with skuNumber=\"+pm.environment.get('skuNumber2')]=pm.expect(jsonData.cartData[0].skuNumber).to.equal(pm.environment.get('skuNumber2'));",
+									"        tests[\"Merged Cart having Sku with price=\"+pm.environment.get('price2')]=pm.expect(''+jsonData.cartData[0].price+'').to.equal(pm.environment.get('price2'));",
+									"  //  tests[\"Authentication Service  have Property resetToken\"]= pm.expect(jsonData).to.have.property('resetToken');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Beraer {{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"userId\":{{userId}},\"cartItems\":[{\"cartIdfier\":\"1551691620363-16937B81423\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":1552977036436,\"removed\":false}]}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/merge-carts",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"merge-carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WhishList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "993ebd89-fd1e-4d66-aac2-448f5a7cec11",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   var lengths=jsonData.length;",
+									"   console.log(lengths);",
+									"   ",
+									"   if(lengths===0)",
+									"   { ",
+									"     tests[\"Whishlist is empty\"]=pm.expect(jsonData.length).to.equal( 0);",
+									"     console.log(\"Whishlist is empty\")",
+									"      ",
+									"   }",
+									"   else",
+									"   {",
+									"         tests[\"Whishlist   have Property orgIdfier \"]= pm.expect(jsonData[0]).to.have.property('orgIdfier');",
+									"         tests[\"Whishlist   have Property price\"]= pm.expect(jsonData[0]).to.have.property('price');",
+									"         tests[\"Whishlist   have Property skuNumber \"]= pm.expect(jsonData[0]).to.have.property('skuNumber');",
+									"         tests[\"Whishlist   have Property userId\"]= pm.expect(jsonData[0]).to.have.property('userId');",
+									"       ",
+									"   }",
+									"   ",
+									"",
+									"  "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/wishlists?lang=en&userType=buyer&orgIdfier=scg&userId={{userId}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"wishlists"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Address_Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f1b885c-d662-4335-87e3-c4c6547fa8a8",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   var lengths=jsonData.length;",
+									"   console.log(lengths);",
+									"   if(lengths===0)",
+									"   {",
+									"       tests[\"Deafault address is not present \"]=jsonData.length;",
+									"   }",
+									"   else",
+									"   {",
+									"        var addressIdfier=jsonData[0].addressIdfier",
+									"        postman.setEnvironmentVariable('addressIdfier',addressIdfier);",
+									"        tests[\"Address   have Property addressLine1 \"]= pm.expect(jsonData[0]).to.have.property('addressLine1');",
+									"        tests[\"Address   have Property city\"]= pm.expect(jsonData[0]).to.have.property('city');",
+									"        tests[\"Address   have Property districtCode \"]= pm.expect(jsonData[0]).to.have.property('districtCode');",
+									"         tests[\"Address   have Property districtName \"]= pm.expect(jsonData[0]).to.have.property('districtName');",
+									"        tests[\"Address   have Property fullName\"]= pm.expect(jsonData[0]).to.have.property('fullName');",
+									"        tests[\"Address   have Property phoneNo \"]= pm.expect(jsonData[0]).to.have.property('phoneNo');",
+									"         tests[\"Address   have Property subDistrictCode \"]= pm.expect(jsonData[0]).to.have.property('subDistrictCode');",
+									"         var subDistrictCode=jsonData[0].subDistrictCode;",
+									"         postman.setEnvironmentVariable('subDistrictCode',subDistrictCode);",
+									"        tests[\"Address   have Property subDistrictName\"]= pm.expect(jsonData[0]).to.have.property('subDistrictName');",
+									"        ",
+									"        tests[\"Address   have Property zipCode \"]= pm.expect(jsonData[0]).to.have.property('zipCode');",
+									"        var zipCode=jsonData[0].zipCode;",
+									"         postman.setEnvironmentVariable('zipCode',zipCode);",
+									"          var fullName=jsonData[0].fullName;",
+									"         postman.setEnvironmentVariable('fullName',fullName);",
+									"         var city=jsonData[0].city;",
+									"         postman.setEnvironmentVariable('city',city);",
+									"         var addressLine1=jsonData[0].addressLine1;",
+									"         postman.setEnvironmentVariable('addressLine1',addressLine1);",
+									"         var subDistrictName=jsonData[0].subDistrictName;",
+									"         postman.setEnvironmentVariable('subDistrictName',subDistrictName);",
+									"         var districtName=jsonData[0].districtName;",
+									"         postman.setEnvironmentVariable('districtName',districtName);",
+									"         var districtCode=jsonData[0].districtCode;",
+									"         postman.setEnvironmentVariable('districtCode',districtCode);",
+									"          var phoneNo=jsonData[0].phoneNo;",
+									"         postman.setEnvironmentVariable('phoneNo',phoneNo);",
+									"         ",
+									"        ",
+									"   }",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/address?lang=en&userType=buyer&orgIdfier=scg&userId={{userId}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"address"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OverView",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a08eae7-e4d9-443e-bcfb-d6a620eb2068",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   if(jsonData.shipments.length>=1)",
+									"   {",
+									"   var miscData= jsonData.miscData",
+									"   postman.setEnvironmentVariable('miscData',miscData);",
+									"   var OptionType=jsonData.shipments[0].selectedDeliveryOption.optionType",
+									"   var shipmentIdfier=jsonData.shipments[0].shipmentIdfier",
+									"   postman.setEnvironmentVariable('OptionType',OptionType);",
+									"   postman.setEnvironmentVariable('shipmentIdfier',shipmentIdfier);",
+									"   var totalShippingCost=jsonData.totalShippingCost",
+									"   console.log(totalShippingCost);",
+									"   const totalItemsPrice=jsonData.totalItemsPrice",
+									"    console.log(totalItemsPrice);",
+									"   var Handlingcost=jsonData.totalHandlingCost",
+									"   console.log(Handlingcost);",
+									"   var totalPrice=jsonData.totalPrice;",
+									"   postman.setEnvironmentVariable('totalPrice',totalPrice)",
+									"   var total=totalShippingCost+Handlingcost+totalItemsPrice",
+									"   console.log(total);",
+									"  tests[\"item price=\"+pm.environment.get('price2')]=pm.expect(''+jsonData.totalItemsPrice+'').to.equal(pm.environment.get('price2'));",
+									"  tests[\"Total price should be equal \"]=pm.expect(total).to.equal(totalPrice);",
+									"   }",
+									"   else",
+									"   {",
+									"       tests[\"No shipments available\"]= jsonData.shipments.length",
+									"        ",
+									"       ",
+									"   }",
+									"   "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"destinationSubDistrictCode\":\"{{subDistrictCode}}\",\"cartId\":\"1552977501798-666\",\"requestId\":\"16994D01BAA-1696B193852-1552982292738\",\"cartItems\":{{jsonData}},\"destinationZipCode\":\"{{zipCode}}\",\"couponCode\":\"\",\"userId\":{{userId}}}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/preorder/overview",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"preorder",
+								"overview"
 							]
 						}
 					},
