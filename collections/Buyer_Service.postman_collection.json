@@ -1141,6 +1141,143 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Cart_Operations",
+			"item": [
+				{
+					"name": "Add_To_Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ebb7d8d7-6434-421c-b61e-1e92567b617d",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"  var sellerid=jsonData[0].sellerId",
+									"  console.log(sellerid)",
+									"   ",
+									"   tests[\"cart product have Property  bulkPrice\"]= pm.expect(jsonData[0]).to.have.property('bulkPrice');",
+									"   tests[\"cart product have Property  bulkQuantity\"]= pm.expect(jsonData[0]).to.have.property('bulkQuantity');",
+									"   tests[\"cart product have Property  cartIdfier\"]= pm.expect(jsonData[0]).to.have.property('cartIdfier');",
+									"   tests[\"cart product have Property  categoryId\"]= pm.expect(jsonData[0]).to.have.property('categoryId');",
+									"   tests[\"cart product have Property  comingSoon\"]= pm.expect(jsonData[0]).to.have.property('comingSoon');",
+									"   tests[\"cart product have Property  dimensionUnit\"]= pm.expect(jsonData[0]).to.have.property('dimensionUnit');",
+									"   tests[\"cart product have Property  quantity\"]= pm.expect(jsonData[0]).to.have.property('quantity');",
+									"    tests[\"cart product have Property  inStock\"]= pm.expect(jsonData[0]).to.have.property('inStock');",
+									"   tests[\"cart product have Property  itemTotalPrice\"]= pm.expect(jsonData[0]).to.have.property('itemTotalPrice');",
+									"   tests[\"cart product have Property  name\"]= pm.expect(jsonData[0]).to.have.property('name')",
+									"     tests[\"cart product have Property  skuNumber=\"]= pm.expect(jsonData[0].skuNumber).to.equal(pm.environment.get('skuNumber1'));",
+									"  tests[\"cart product have Property  quantity=\"]= pm.expect(jsonData[0].quantity).to.equal(1);",
+									"  tests[\"cart product have Property  installationRequired=\"]= pm.expect(jsonData[0].installationRequired).to.equal(false);",
+									"  tests[\"cart product have Property  sampleItem=\"]= pm.expect(jsonData[0].sampleItem).to.equal(false);",
+									"  "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552900906689}]}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/cart-products",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"cart-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cart_Price",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7cae4903-2844-400d-823e-3a228a150b51",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartId\":\"1552899049213-1696B193852\",\"requestId\":\"1698FFEFA72-1696B193852-1552908744230\",\"destinationZipCode\":\"\",\"couponCode\":\"\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552908737316,\"removed\":false}]}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/cart-price",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"cart-price"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
