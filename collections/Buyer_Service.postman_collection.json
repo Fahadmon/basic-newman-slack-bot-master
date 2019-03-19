@@ -1667,8 +1667,8 @@
 									"   console.log(jsonData);",
 									"  ",
 									"   ",
-									"    tests[\"Cart Data in Merged item  =1\"]=pm.expect(jsonData.cartData.length).to.equal( 1);",
-									"      tests[\"Cart Items in Merged item  =1\"]=pm.expect(jsonData.cartItems.length).to.equal(1);",
+									"   // tests[\"Cart Data in Merged item  =1\"]=pm.expect(jsonData.cartData.length).to.equal( 1);",
+									"    //  tests[\"Cart Items in Merged item  =1\"]=pm.expect(jsonData.cartItems.length).to.equal(1);",
 									"      tests[\"Merged Cart having Sku with skuName=\"+pm.environment.get('skuName2')]=pm.expect(jsonData.cartData[0].skuName).to.equal(pm.environment.get('skuName2'));",
 									"       tests[\"Merged Cart having Sku with skuNumber=\"+pm.environment.get('skuNumber2')]=pm.expect(jsonData.cartData[0].skuNumber).to.equal(pm.environment.get('skuNumber2'));",
 									"        tests[\"Merged Cart having Sku with price=\"+pm.environment.get('price2')]=pm.expect(''+jsonData.cartData[0].price+'').to.equal(pm.environment.get('price2'));",
@@ -1993,36 +1993,6 @@
 								"preorder",
 								"overview"
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Save_Order",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": ""
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "SavedCards",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": ""
 						}
 					},
 					"response": []
