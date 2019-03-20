@@ -1931,13 +1931,15 @@
 									"   var jsonData = JSON.parse(responseBody); ",
 									"   console.log(jsonData);",
 									"   var lengths=jsonData.length;",
-									"   console.log(lengths);",
 									"   if(lengths===0)",
 									"   {",
-									"       tests[\"Deafault address is not present \"]=jsonData.length;",
+									"       tests[\"Default address is not present\"]=jsonData.length===0",
+									"       postman.setNextRequest(\"Add_Address\");",
+									"       ",
 									"   }",
-									"   else",
-									"   {",
+									"  else",
+									"  {",
+									" ",
 									"        var addressIdfier=jsonData[0].addressIdfier",
 									"        postman.setEnvironmentVariable('addressIdfier',addressIdfier);",
 									"        tests[\"Address   have Property addressLine1 \"]= pm.expect(jsonData[0]).to.have.property('addressLine1');",
@@ -1968,9 +1970,8 @@
 									"         postman.setEnvironmentVariable('districtCode',districtCode);",
 									"          var phoneNo=jsonData[0].phoneNo;",
 									"         postman.setEnvironmentVariable('phoneNo',phoneNo);",
-									"         ",
-									"        ",
-									"   }",
+									"         postman.setNextRequest(\"OverView\");",
+									"}",
 									""
 								],
 								"type": "text/javascript"
@@ -2016,6 +2017,100 @@
 									"key": "userId",
 									"value": "{{userId}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add_Address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9117e0fc-2f33-4408-bf84-f56edc6c023d",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"pm.test(\"response should be okay to process\", function () { \r",
+									"    pm.response.to.not.be.error; \r",
+									"    pm.response.to.not.have.jsonBody(\"error\"); \r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    \r",
+									"})\r",
+									"\r",
+									"   var jsonData = JSON.parse(responseBody); \r",
+									"   console.log(jsonData);\r",
+									"   var lengths=jsonData.length;\r",
+									"\r",
+									"        var addressIdfier=jsonData.address.addressIdfier\r",
+									"        postman.setEnvironmentVariable('addressIdfier',addressIdfier);\r",
+									"        tests[\"Address   have Property addressLine1 \"]= pm.expect(jsonData.address).to.have.property('addressLine1');\r",
+									"        tests[\"Address   have Property city\"]= pm.expect(jsonData.address).to.have.property('city');\r",
+									"        tests[\"Address   have Property districtCode \"]= pm.expect(jsonData.address).to.have.property('districtCode');\r",
+									"         tests[\"Address   have Property districtName \"]= pm.expect(jsonData.address).to.have.property('districtName');\r",
+									"        tests[\"Address   have Property fullName\"]= pm.expect(jsonData.address).to.have.property('fullName');\r",
+									"        tests[\"Address   have Property phoneNo \"]= pm.expect(jsonData.address).to.have.property('phoneNo');\r",
+									"         tests[\"Address   have Property subDistrictCode \"]= pm.expect(jsonData.address).to.have.property('subDistrictCode');\r",
+									"         var subDistrictCode=jsonData.address.subDistrictCode;\r",
+									"         postman.setEnvironmentVariable('subDistrictCode',subDistrictCode);\r",
+									"        tests[\"Address   have Property subDistrictName\"]= pm.expect(jsonData.address).to.have.property('subDistrictName');\r",
+									"        \r",
+									"        tests[\"Address   have Property zipCode \"]= pm.expect(jsonData.address).to.have.property('zipCode');\r",
+									"        tests[\"Adress is created \"]=pm.expect(jsonData.status).to.equal('created')\r",
+									"        var zipCode=jsonData.address.zipCode;\r",
+									"         postman.setEnvironmentVariable('zipCode',zipCode);\r",
+									"          var fullName=jsonData.address.fullName;\r",
+									"         postman.setEnvironmentVariable('fullName',fullName);\r",
+									"         var city=jsonData.address.city;\r",
+									"         postman.setEnvironmentVariable('city',city);\r",
+									"         var addressLine1=jsonData.address.addressLine1;\r",
+									"         postman.setEnvironmentVariable('addressLine1',addressLine1);\r",
+									"         var subDistrictName=jsonData.address.subDistrictName;\r",
+									"         postman.setEnvironmentVariable('subDistrictName',subDistrictName);\r",
+									"         var districtName=jsonData.address.districtName;\r",
+									"         postman.setEnvironmentVariable('districtName',districtName);\r",
+									"         var districtCode=jsonData.address.districtCode;\r",
+									"         postman.setEnvironmentVariable('districtCode',districtCode);\r",
+									"          var phoneNo=jsonData.address.phoneNo;\r",
+									"         postman.setEnvironmentVariable('phoneNo',phoneNo);\r",
+									"\r",
+									"        \r",
+									"  \r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"userId\":{{userId}},\"fullName\":\"{{fullName}}\",\"addressLine1\":\"{{addressLine1}}\",\"city\":\"{{city}}\",\"zipCode\":\"{{zipCode}}\",\"districtName\":\"{{districtName}}\",\"districtCode\":\"{{districtCode}}\",\"subDistrictName\":\"{{subDistrictName}}\",\"subDistrictCode\":\"{{subDistrictCode}}\",\"value\":\"\",\"phoneNo\":\"{{phoneNo}}\",\"defaultAddress\":true,\"addressIdfier\":null}"
+						},
+						"url": {
+							"raw": "{{environment}}/buyer-service/address",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"buyer-service",
+								"address"
 							]
 						}
 					},
@@ -2191,13 +2286,20 @@
 									"",
 									"   var jsonData = JSON.parse(responseBody); ",
 									"   console.log(jsonData);",
+									"   if(jsonData.length===0)",
+									"   {",
+									"       tests[\"There is NO saved cards associated with your account \"]==jsonData.length===0",
+									"   }",
+									"   else",
+									"   {",
 									"   tests[\"Saved Card Having the Property orgIdfier\"]=pm.expect(jsonData[0]).to.have.property('orgIdfier')",
 									"    tests[\"Saved Card Having the Property userCardId\"]=pm.expect(jsonData[0]).to.have.property('userCardId')",
 									"     tests[\"Saved Card Having the Property userId\"]=pm.expect(jsonData[0]).to.have.property('userId')",
 									"      tests[\"Saved Card Having the Property maskedCardInfo\"]=pm.expect(jsonData[0]).to.have.property('maskedCardInfo')",
 									"       tests[\"Saved Card Having the Property cardType\"]=pm.expect(jsonData[0]).to.have.property('cardType')",
 									"   var userCardId=jsonData[0].userCardId;",
-									"   postman.setEnvironmentVariable('userCardId',userCardId)"
+									"   postman.setEnvironmentVariable('userCardId',userCardId)",
+									"   }"
 								],
 								"type": "text/javascript"
 							}
