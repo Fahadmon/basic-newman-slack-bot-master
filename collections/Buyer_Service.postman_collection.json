@@ -2030,7 +2030,7 @@
 								"id": "2a08eae7-e4d9-443e-bcfb-d6a620eb2068",
 								"exec": [
 									"pm.test(\"Response status is ok\",function(){",
-									"    pm.response.to.have.status(200);",
+									"pm.environment.set(\"variable_key\", \"variable_value\");    pm.response.to.have.status(200);",
 									"})",
 									"pm.test(\"response should be okay to process\", function () { ",
 									"    pm.response.to.not.be.error; ",
@@ -2103,6 +2103,203 @@
 								"order-service",
 								"preorder",
 								"overview"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save_Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "add33391-506d-4cbb-b561-3a9232d05e73",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   tests[\"Save Order Having the Property orderNo\"]=pm.expect(jsonData).to.have.property('orderNo')",
+									"   var orderNo=jsonData.orderNo;",
+									"   postman.setEnvironmentVariable('orderNo',orderNo)",
+									"   tests[\"Save Order Having the Property status\"]=pm.expect(jsonData).to.have.property('status')"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"userId\":{{userId}},\"deliveryAddress\":{\"orgIdfier\":\"scg\",\"addressIdfier\":\"{{addressIdfier}}\",\"userId\":{{userId}},\"defaultAddress\":true,\"fullName\":\"{{fullName}}\",\"phoneNo\":\"{{phoneNo}}\",\"city\":\"{{city}}\",\"state\":null,\"country\":null,\"zipCode\":\"{{zipCode}}\",\"addressLine1\":\"{{addressLine1}}\",\"addressLine2\":null,\"subDistrictName\":\"{{subDistrictName}}\",\"subDistrictCode\":\"{{subDistrictCode}}\",\"districtName\":\"{{districtName}}\",\"districtCode\":\"{{districtCode}}\",\"shipTo\":\"Ships to ({{zipCode}})\"},\"billingAddress\":\"\",\"guestUser\":false,\"userEmail\":\"{{email}}\",\"orderNo\":null,\"selectedShippingMethods\":{\"{{shipmentIdfier}}\":\"{{OptionType}}\"},\"misc\":\"{{miscData}}\"\n}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/saveorder",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"saveorder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SavedCards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a3bb7d14-001f-4222-8107-547cd2d7306b",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   tests[\"Saved Card Having the Property orgIdfier\"]=pm.expect(jsonData[0]).to.have.property('orgIdfier')",
+									"    tests[\"Saved Card Having the Property userCardId\"]=pm.expect(jsonData[0]).to.have.property('userCardId')",
+									"     tests[\"Saved Card Having the Property userId\"]=pm.expect(jsonData[0]).to.have.property('userId')",
+									"      tests[\"Saved Card Having the Property maskedCardInfo\"]=pm.expect(jsonData[0]).to.have.property('maskedCardInfo')",
+									"       tests[\"Saved Card Having the Property cardType\"]=pm.expect(jsonData[0]).to.have.property('cardType')",
+									"   var userCardId=jsonData[0].userCardId;",
+									"   postman.setEnvironmentVariable('userCardId',userCardId)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/savedcards/{{userId}}?lang=en&userType=buyer&orgIdfier=scg",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"savedcards",
+								"{{userId}}"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ClearCart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ada90f45-141a-45b4-b45b-8d829c3fad30",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/clear-carts?lang=en&userType=buyer&orgIdfier=scg&userId={{userId}}",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"clear-carts"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "userType",
+									"value": "buyer"
+								},
+								{
+									"key": "orgIdfier",
+									"value": "scg"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
 							]
 						}
 					},
