@@ -1196,6 +1196,18 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4625fef0-22ef-4ebf-873d-9d8778e20af5",
+								"exec": [
+									"var timeInSeconds = parseInt((new Date()).getTime() / 1000);",
+									"postman.setEnvironmentVariable('timeInSeconds',timeInSeconds);",
+									"console.log(timeInSeconds);"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -1215,7 +1227,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":1552900906689}]}"
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"{{timeInSeconds}}-1696B193852\",\"skuNumber\":\"{{skuNumber1}}\",\"sellerId\":{{sellerId1}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price1}},\"sequence\":{{timeInSeconds}}}]}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/cart-products",
@@ -1393,6 +1405,18 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6d408bb7-ff5c-4290-a0fb-44cc991e5e64",
+								"exec": [
+									"var timeInSeconds2 = parseInt((new Date()).getTime() / 1000);",
+									"postman.setEnvironmentVariable('timeInSeconds2',timeInSeconds2);",
+									"console.log(timeInSeconds2);"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -1412,7 +1436,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":1552900906689}]}"
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartItems\":[{\"cartIdfier\":\"{{timeInSeconds2}}-1696B193852\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":{{timeInSeconds2}}}]}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/cart-products",
@@ -1470,7 +1494,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartId\":\"1552899049213-1696B193852\",\"requestId\":\"1698FFEFA72-1696B193852-1552908744230\",\"destinationZipCode\":\"\",\"couponCode\":\"\",\"cartItems\":[{\"cartIdfier\":\"1552899049213-1696B193852\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":1552908737316,\"removed\":false}]}"
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"cartId\":\"{{timeInSeconds2}}-1696B193852\",\"requestId\":\"1698FFEFA72-1696B193852-{{timeInSeconds2}}\",\"destinationZipCode\":\"\",\"couponCode\":\"\",\"cartItems\":[{\"cartIdfier\":\"{{timeInSeconds2}}-1696B193852\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":{{timeInSeconds2}},\"removed\":false}]}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/cart-price",
@@ -1646,6 +1670,93 @@
 			"name": "Checkout",
 			"item": [
 				{
+					"name": "Delete_Cart_If_Exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2120403d-a723-42be-b4c6-3b8d03f379af",
+								"exec": [
+									"pm.test(\"Response status is ok\",function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"    pm.response.to.have.jsonBody();",
+									"    ",
+									"})",
+									"",
+									"   var jsonData = JSON.parse(responseBody); ",
+									"   console.log(jsonData);",
+									"   if(jsonData.length<1)",
+									"   {",
+									"       tests[\"Cart having no data hence merging carts\"]=jsonData.length<1",
+									"       postman.setNextRequest(\"Merge_Carts\");",
+									"   }",
+									"   else",
+									"   {",
+									"       var token=pm.environment.get('accessToken')",
+									"       console.log(token)",
+									"       var env=pm.environment.get('environment')",
+									"       var user=pm.environment.get('userId')",
+									"       tests[\"Cart having previous data hence deleting cartitems\"]=jsonData.length>=1",
+									"       ",
+									"       for(i=0;i<jsonData.length;i++)",
+									"       {",
+									"         ",
+									"           postman.setEnvironmentVariable('cartitemskuNumber',(jsonData[i].skuNumber))",
+									"           const echoPostRequest = {",
+									"           url:env+'/order-service/carts?lang=en&userType=buyer&orgIdfier=scg&userId='+user+'&skuNumber='+jsonData[i].skuNumber+'',",
+									"           method: 'DELETE',",
+									"           header: 'Authorization:Bearer'+\" \"+ token+''",
+									"           ",
+									"};",
+									"pm.sendRequest(echoPostRequest, function (err, res) {",
+									"  console.log(err ? err : res.json());",
+									"});",
+									"           ",
+									"       }",
+									"       ",
+									"       }"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"userId\":{{userId}}}"
+						},
+						"url": {
+							"raw": "{{environment}}/order-service/cart-products",
+							"host": [
+								"{{environment}}"
+							],
+							"path": [
+								"order-service",
+								"cart-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Merge_Carts",
 					"event": [
 						{
@@ -1666,13 +1777,13 @@
 									"   var jsonData = JSON.parse(responseBody); ",
 									"   console.log(jsonData);",
 									"  ",
-									"   ",
-									"   // tests[\"Cart Data in Merged item  =1\"]=pm.expect(jsonData.cartData.length).to.equal( 1);",
-									"    //  tests[\"Cart Items in Merged item  =1\"]=pm.expect(jsonData.cartItems.length).to.equal(1);",
+									"     ",
+									"        tests[\"Cart Data in Merged item  =1\"]=pm.expect(jsonData.cartData.length).to.equal( 1);",
+									"        tests[\"Cart Items in Merged item  =1\"]=pm.expect(jsonData.cartItems.length).to.equal(1);",
 									"      tests[\"Merged Cart having Sku with skuName=\"+pm.environment.get('skuName2')]=pm.expect(jsonData.cartData[0].skuName).to.equal(pm.environment.get('skuName2'));",
 									"       tests[\"Merged Cart having Sku with skuNumber=\"+pm.environment.get('skuNumber2')]=pm.expect(jsonData.cartData[0].skuNumber).to.equal(pm.environment.get('skuNumber2'));",
 									"        tests[\"Merged Cart having Sku with price=\"+pm.environment.get('price2')]=pm.expect(''+jsonData.cartData[0].price+'').to.equal(pm.environment.get('price2'));",
-									"  //  tests[\"Authentication Service  have Property resetToken\"]= pm.expect(jsonData).to.have.property('resetToken');"
+									"    "
 								],
 								"type": "text/javascript"
 							}
@@ -1695,7 +1806,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"userId\":{{userId}},\"cartItems\":[{\"cartIdfier\":\"1551691620363-16937B81423\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":1552977036436,\"removed\":false}]}"
+							"raw": "{\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"userId\":{{userId}},\"cartItems\":[{\"cartIdfier\":\"{{timeInSeconds2}}-16937B81423\",\"skuNumber\":\"{{skuNumber2}}\",\"sellerId\":{{sellerId2}},\"quantity\":1,\"installationRequired\":false,\"sampleItem\":false,\"installationType\":\"\",\"price\":{{price2}},\"sequence\":{{timeInSeconds2}},\"removed\":false}]}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/merge-carts",
@@ -1981,7 +2092,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"destinationSubDistrictCode\":\"{{subDistrictCode}}\",\"cartId\":\"1552977501798-666\",\"requestId\":\"16994D01BAA-1696B193852-1552982292738\",\"cartItems\":{{jsonData}},\"destinationZipCode\":\"{{zipCode}}\",\"couponCode\":\"\",\"userId\":{{userId}}}"
+							"raw": "  {\"lang\":\"en\",\"userType\":\"buyer\",\"orgIdfier\":\"scg\",\"destinationSubDistrictCode\":\"{{subDistrictCode}}\",\"cartId\":\"{{timeInSeconds2}}-{{userId}}\",\"requestId\":\"16994D01BAA-1696B193852-{{timeInSeconds2}}\",\"cartItems\":{{jsonData}},\"destinationZipCode\":\"{{zipCode}}\",\"couponCode\":\"\",\"userId\":{{userId}}}"
 						},
 						"url": {
 							"raw": "{{environment}}/order-service/preorder/overview",
