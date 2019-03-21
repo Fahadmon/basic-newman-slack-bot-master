@@ -107,7 +107,6 @@
 									"})",
 									"",
 									"   var jsonData = JSON.parse(responseBody); ",
-									"   console.log(jsonData)",
 									"   ",
 									"   tests[\"Page  should be 1\"]= jsonData.page   === 1;",
 									"   tests[\"First page should display 32 products\"]= jsonData.limit   === 32;",
